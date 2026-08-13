@@ -1,0 +1,6 @@
+# Arquivo local com segredos e ajustes exclusivos do ambiente de desenvolvimento.
+emprestai_backend/src/main/resources/application-dev.properties
+
+# Saídas geradas pelo Maven e configurações locais da IDE.
+emprestai_backend/target/
+.idea/

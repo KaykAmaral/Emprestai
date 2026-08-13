@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Emprestai Backend (dev)",
+            "request": "launch",
+            "mainClass": "com.example.emprestai.EmprestaiApplication",
+            "projectName": "proati-api",
+            "cwd": "${workspaceFolder}/emprestai_backend",
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "dev"
+            }
+        }
+    ]
+}

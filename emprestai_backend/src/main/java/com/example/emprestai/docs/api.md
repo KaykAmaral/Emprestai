@@ -2,9 +2,10 @@
 
 ## Autenticação
 
-Todos os endpoints (exceto login) exigem um Bearer JWT no header `Authorization`.
-
-Exemplo: `Authorization: Bearer <token_jwt>`
+Todos os endpoints protegidos usam o JWT armazenado no cookie `AUTH_TOKEN` (`HttpOnly`).
+O cookie é emitido pelo login e enviado automaticamente pelo navegador. Para operações que alteram dados,
+o cliente deve primeiro obter o cookie `XSRF-TOKEN` em `GET /api/auth/csrf` e enviá-lo no header `X-XSRF-TOKEN`.
+No React, as requisições devem usar `credentials: "include"` para enviar e receber cookies.
 
 JWT contém `sub` (email do usuário), `iat`, `exp`, e custom claim `papel` (papel do usuário).
 
@@ -16,7 +17,10 @@ JWT contém `sub` (email do usuário), `iat`, `exp`, e custom claim `papel` (pap
 
 | Método | Path | Papel | Descrição | RF |
 |--------|------|-------|-----------|-----|
-| POST | `/api/auth/login` | — | Login com email e senha; retorna JWT | RF01 |
+| GET | `/api/auth/csrf` | — | Emite o token CSRF necessário para operações de escrita | — |
+| POST | `/api/auth/setup/administrador` | — | Cria o único ADM_SUPREMO inicial enquanto não existir outro ativo | — |
+| POST | `/api/auth/login` | — | Login com email e senha; emite cookie JWT | RF01 |
+| POST | `/api/auth/logout` | — | Expira os cookies de autenticação no navegador | — |
 
 **Request**:
 ```json
@@ -26,10 +30,23 @@ JWT contém `sub` (email do usuário), `iat`, `exp`, e custom claim `papel` (pap
 }
 ```
 
+**POST /api/auth/setup/administrador**
+
+Exige os headers `X-Setup-Key` (igual a `INITIAL_SETUP_KEY`) e `X-XSRF-TOKEN`.
+
+```json
+{
+  "nome": "string",
+  "email": "string",
+  "senha": "string (mínimo de 8 caracteres)"
+}
+```
+
+Retorna `201` ao criar o administrador, `403` para chave inválida e `409` quando já houver um `ADM_SUPREMO` ativo.
+
 **Response** (200):
 ```json
 {
-  "token": "string (JWT)",
   "usuario": {
     "id": "long",
     "nome": "string",
