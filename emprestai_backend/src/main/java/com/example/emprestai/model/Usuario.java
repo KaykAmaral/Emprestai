@@ -70,4 +70,6 @@ public class Usuario {
     public PapelUsuario getPapel() { return papel; }
     public UnidadeEscolar getUnidadeEscolar() { return unidadeEscolar; }
     public boolean isAtivo() { return ativo; }
+
+    public void setUnidadeEscolar(UnidadeEscolar unidadeEscolar) { this.unidadeEscolar = unidadeEscolar; }
 }

@@ -20,6 +20,10 @@ public class UnidadeEscolar {
 
     protected UnidadeEscolar() { }
 
+    public UnidadeEscolar(String nome) {
+        this.nome = nome;
+    }
+
     public Long getId() { return id; }
     public String getNome() { return nome; }
 }

@@ -29,6 +29,18 @@ public class GlobalExceptionHandler {
                 .body(Map.of("status", 409, "message", exception.getMessage()));
     }
 
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    ResponseEntity<Map<String, Object>> emailJaCadastrado(EmailJaCadastradoException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("status", 409, "message", exception.getMessage()));
+    }
+
+    @ExceptionHandler(UnidadeEscolarNotFoundException.class)
+    ResponseEntity<Map<String, Object>> unidadeEscolarNaoEncontrada(UnidadeEscolarNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("status", 404, "message", exception.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<Map<String, Object>> validation(MethodArgumentNotValidException exception) {
         List<String> details = exception.getBindingResult().getFieldErrors().stream()
