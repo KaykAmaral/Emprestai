@@ -3,7 +3,7 @@ package com.example.emprestai.controller;
 import java.util.List;
 import com.example.emprestai.dto.request.UnidadeEscolarRequest;
 import com.example.emprestai.model.UnidadeEscolar;
-import com.example.emprestai.repository.UnidadeEscolarRepository;
+import com.example.emprestai.service.UnidadeEscolarService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/unidades")
 public class UnidadeEscolarController {
-    private final UnidadeEscolarRepository unidadeEscolarRepository;
+    private final UnidadeEscolarService unidadeEscolarService;
 
-    public UnidadeEscolarController(UnidadeEscolarRepository unidadeEscolarRepository) {
-        this.unidadeEscolarRepository = unidadeEscolarRepository;
+    public UnidadeEscolarController(UnidadeEscolarService unidadeEscolarService) {
+        this.unidadeEscolarService = unidadeEscolarService;
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADM_SUPREMO', 'ADM_PROATI')")
     public List<UnidadeEscolar> listar() {
-        return unidadeEscolarRepository.findAll();
+        return unidadeEscolarService.listar();
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADM_SUPREMO')")
     public ResponseEntity<UnidadeEscolar> criar(@Valid @RequestBody UnidadeEscolarRequest request) {
-        UnidadeEscolar unidade = unidadeEscolarRepository.save(new UnidadeEscolar(request.nome().trim()));
+        UnidadeEscolar unidade = unidadeEscolarService.criar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(unidade);
     }
 }

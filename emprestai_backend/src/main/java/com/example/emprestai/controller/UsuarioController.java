@@ -2,7 +2,6 @@ package com.example.emprestai.controller;
 
 import com.example.emprestai.dto.request.UsuarioRequest;
 import com.example.emprestai.dto.response.UsuarioResponse;
-import com.example.emprestai.model.Usuario;
 import com.example.emprestai.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,10 +22,10 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    /** Criação de PROATI para unidade escolar, só é autorizada se o user for ADM_SUPREMO */
     @PostMapping("/adm-proati")
     @PreAuthorize("hasRole('ADM_SUPREMO')")
     public ResponseEntity<UsuarioResponse> criarAdmProati(@Valid @RequestBody UsuarioRequest request) {
-        Usuario usuario = usuarioService.criarAdmProati(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioResponse.from(usuario));
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.criarAdmProati(request));
     }
 }

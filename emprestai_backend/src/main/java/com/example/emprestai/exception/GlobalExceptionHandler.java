@@ -2,6 +2,7 @@ package com.example.emprestai.exception;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,10 +36,29 @@ public class GlobalExceptionHandler {
                 .body(Map.of("status", 409, "message", exception.getMessage()));
     }
 
+    @ExceptionHandler(LimiteAdmProatiAtingidoException.class)
+    ResponseEntity<Map<String, Object>> limiteAdmProatiAtingido(LimiteAdmProatiAtingidoException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("status", 409, "message", exception.getMessage()));
+    }
+
     @ExceptionHandler(UnidadeEscolarNotFoundException.class)
     ResponseEntity<Map<String, Object>> unidadeEscolarNaoEncontrada(UnidadeEscolarNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("status", 404, "message", exception.getMessage()));
+    }
+
+    @ExceptionHandler(UnidadeEscolarJaCadastradaException.class)
+    ResponseEntity<Map<String, Object>> unidadeEscolarJaCadastrada(UnidadeEscolarJaCadastradaException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("status", 409, "message", exception.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    ResponseEntity<Map<String, Object>> dataIntegrityViolation(DataIntegrityViolationException exception) {
+        // Fallback: restrições de unicidade não capturadas previamente (ex.: corrida em cadastros simultâneos).
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("status", 409, "message", "Dado já cadastrado ou violação de integridade"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
